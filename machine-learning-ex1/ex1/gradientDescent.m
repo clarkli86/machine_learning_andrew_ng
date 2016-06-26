@@ -22,15 +22,12 @@ for iter = 1:num_iters
     J_history(iter) = computeCost(X, y, theta);
     % disp(J_history(iter))
 
-    s1 = 0;
-    s2 = 0;
-    % TODO: Vectorise
+    % This also works for multi variables
+    s = zeros(length(theta), 1);
     for j = 1:m
-        s1 += (X(j,:) * theta - y(j)) * X(j, 1);
-        s2 += (X(j,:) * theta - y(j)) * X(j, 2);
+        s += ((X(j,:) * theta - y(j)) * X(j,:))';
     end
-    theta(1) = theta(1) - alpha * s1 / m;
-    theta(2) = theta(2) - alpha * s2 / m;
+    theta = theta - alpha * s / m;
 
 end
 
