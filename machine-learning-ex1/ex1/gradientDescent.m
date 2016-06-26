@@ -23,11 +23,8 @@ for iter = 1:num_iters
     % disp(J_history(iter))
 
     % This also works for multi variables
-    s = zeros(length(theta), 1);
-    for j = 1:m
-        s += ((X(j,:) * theta - y(j)) * X(j,:))';
-    end
-    theta = theta - alpha * s / m;
+    s = (X * theta - y)' * X;
+    theta = theta - alpha * s' / m;
 
 end
 
