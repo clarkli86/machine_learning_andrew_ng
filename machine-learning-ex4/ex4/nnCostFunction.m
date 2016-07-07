@@ -80,8 +80,26 @@ J /= m;
 reg = sum(sum((Theta1(:,2:end) .^ 2))) + sum(sum((Theta2(:,2:end) .^ 2)));
 reg = reg * lambda / (2 * m);
 J += reg;
+
+% Compute gradients
+for i = 1:m
+    z2 = X(i,:) * Theta1';
+    a2 = 1 ./ (1 + exp(-z2));
+    a2 = [ones(size(a2), 1) a2];
+    z3 = a2 * Theta2';
+    a3 = 1 ./ (1 + exp(-z3));
+
+    % Backprogation
+    d3 = (a3 - ([1:num_labels] == y(i)))';
+    d2 = (Theta2' * d3)(2:end) .* sigmoidGradient(z2)';
+
+    Theta2_grad += d3 * a2;
+    Theta1_grad += d2 * X(i,:);
+end
+
+Theta2_grad /= m;
+Theta1_grad /= m;
+
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
-
 end
